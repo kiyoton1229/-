@@ -105,7 +105,7 @@ button:hover{
 <div class="container">
   <h1 id="title">🌌 親友専用クエスト 🌌</h1>
   <p id="text">ミッション：宇宙レベルの1年を始めよ。</p>
-  <button onclick="nextLevel()">さぁ新しい1年を始めよう</button>
+  <button onclick="nextLevel()">NEXT</button>
   <br>
   <img id="photo" src="bestfriend.jpg">
   <br>
@@ -186,7 +186,7 @@ function ultimate(){
   const signature=document.getElementById("signature");
 
   const rocket=document.createElement("img");
-  rocket.src="rocket.png";
+  rocket.src="rocket.PNG";   // ← 大文字PNG対応
   rocket.className="rocket";
   document.body.appendChild(rocket);
 
