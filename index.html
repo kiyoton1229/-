@@ -3,26 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>親友へ - Happy Birthday</title>
+<title>親友専用クエスト</title>
+
 <style>
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #2b2b45);
+  font-family: Arial, sans-serif;
+  background: black;
   color: white;
   text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  overflow: hidden;
 }
 
 .container {
-  max-width: 600px;
+  padding: 20px;
+  margin-top: 15vh;
+}
+
+h1 {
+  font-size: 2.5em;
+  text-shadow: 0 0 20px #ff00ff;
+}
+
+p {
+  font-size: 1.3em;
 }
 
 button {
-  background: #ff4da6;
+  background: #ff0080;
   border: none;
   padding: 15px 30px;
   font-size: 18px;
@@ -34,22 +42,47 @@ button {
 }
 
 button:hover {
-  background: #ff1a8c;
-  transform: scale(1.1);
+  transform: scale(1.2);
+  box-shadow: 0 0 20px #ff00ff;
 }
 
-.hidden {
+#photo {
+  width: 80%;
+  max-width: 400px;
+  margin-top: 20px;
+  border-radius: 20px;
   display: none;
+  box-shadow: 0 0 30px #00ffff;
+}
+
+.firework {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background: yellow;
+  border-radius: 50%;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  to {
+    transform: translate(var(--x), var(--y));
+    opacity: 0;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<audio id="bgm" src="music.mp3"></audio>
+
 <div class="container">
   <h1 id="title">🎮 親友専用クエスト 🎮</h1>
   <p id="text">ミッション：最高の1年をスタートせよ。</p>
   <button onclick="nextLevel()">▶ スタート</button>
+  <br>
+  <img id="photo" src="bestfriend.jpg">
 </div>
 
 <script>
@@ -58,6 +91,12 @@ let level = 0;
 function nextLevel() {
   const title = document.getElementById("title");
   const text = document.getElementById("text");
+  const photo = document.getElementById("photo");
+  const music = document.getElementById("bgm");
+
+  if(level === 0){
+    music.play();
+  }
 
   level++;
 
@@ -71,11 +110,26 @@ function nextLevel() {
   }
   else if(level === 3){
     title.innerHTML = "FINAL STAGE 👑";
-    text.innerHTML = "親友へ。本当にお誕生日おめでとう！！！これからも一緒に最強の思い出作ろうな。";
+    text.innerHTML = "これからも一緒に最強の思い出作ろう！";
+    photo.style.display = "block";
+    launchFireworks();
   }
   else{
     title.innerHTML = "🎂 HAPPY BIRTHDAY 🎂";
     text.innerHTML = "今日の主役は君だ！！";
+  }
+}
+
+function launchFireworks(){
+  for(let i=0;i<100;i++){
+    const fw = document.createElement("div");
+    fw.className = "firework";
+    fw.style.left = "50%";
+    fw.style.top = "50%";
+    fw.style.setProperty('--x', (Math.random()*600-300)+'px');
+    fw.style.setProperty('--y', (Math.random()*600-300)+'px');
+    document.body.appendChild(fw);
+    setTimeout(()=>fw.remove(),1000);
   }
 }
 </script>
