@@ -20,6 +20,8 @@ canvas{
   position:fixed;
   top:0;
   left:0;
+  width:100%;
+  height:100%;
   z-index:-1;
 }
 
@@ -153,11 +155,16 @@ style.innerHTML=`
 }`;
 document.head.appendChild(style);
 
-/* 星背景 */
+/* 星背景の修正：canvas サイズ自動更新 */
 const canvas=document.getElementById("stars");
 const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+
+function resizeCanvas(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 let stars=[];
 for(let i=0;i<150;i++){
