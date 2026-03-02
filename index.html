@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>宇宙バースデー</title>
+<title>crazyゆうき BIRTHDAY</title>
 
 <style>
 body{
   margin:0;
+  padding:0;
   overflow:hidden;
-  font-family:Arial, sans-serif;
-  background:black;
-  color:white;
+  font-family:sans-serif;
   text-align:center;
+  color:white;
+  background:linear-gradient(to bottom,#000428,#004e92);
 }
 
 canvas{
@@ -22,145 +23,78 @@ canvas{
   z-index:-1;
 }
 
-.container{
-  margin-top:20vh;
-  position:relative;
-  z-index:2;
+h1{
+  margin-top:100px;
+  font-size:2em;
+  text-shadow:0 0 20px #00f;
 }
 
-h1{
-  font-size:2.5em;
-  text-shadow:0 0 25px cyan;
+p{
+  font-size:1.2em;
+  margin:20px;
 }
 
 button{
-  background:cyan;
+  padding:15px 30px;
+  font-size:1.2em;
   border:none;
-  padding:18px 35px;
-  font-size:18px;
-  border-radius:40px;
+  border-radius:30px;
+  background:#00c3ff;
+  color:white;
   cursor:pointer;
-  transition:0.3s;
+  box-shadow:0 0 20px #00c3ff;
 }
 
 button:hover{
-  transform:scale(1.1);
+  background:#0099cc;
 }
 
-#photo{
-  width:80%;
-  max-width:400px;
-  margin-top:20px;
-  border-radius:20px;
-  display:none;
-  box-shadow:0 0 40px cyan;
-}
-
-#signature{
+#rocket{
   position:fixed;
-  bottom:15px;
-  width:100%;
-  font-size:14px;
-  display:none;
-}
-
-#lastBtn{
-  display:none;
-  margin-top:20px;
-}
-
-.rocket{
-  position:fixed;
-  bottom:-250px;
+  bottom:-200px;
   left:50%;
   transform:translateX(-50%);
-  width:120px;
-  animation:launch 3s ease-out forwards;
-  z-index:5;
+  width:150px;
+  transition:3s ease-in-out;
 }
 
-@keyframes launch{
-  0%{bottom:-250px;}
-  100%{bottom:120%;}
-}
-
-.confetti{
-  position:fixed;
-  width:8px;
-  height:14px;
-  top:-20px;
-  animation:fall 3s linear forwards;
-}
-
-@keyframes fall{
-  0%{transform:translateY(0) rotate(0deg);}
-  100%{transform:translateY(100vh) rotate(720deg);}
+.photo{
+  width:250px;
+  border-radius:20px;
+  margin-top:20px;
+  box-shadow:0 0 20px white;
 }
 </style>
 </head>
+
 <body>
 
 <canvas id="stars"></canvas>
 
-<div class="container">
-  <h1 id="title">🌌 親友専用クエスト 🌌</h1>
-  <p id="text">ミッション：宇宙レベルの1年を始めよ。</p>
-  <button onclick="nextLevel()">NEXT</button>
-  <br>
-  <img id="photo" src="bestfriend.jpg">
-  <br>
-  <button id="lastBtn" onclick="celebrate()">新しい1年</button>
-</div>
+<audio id="bgm" src="music.mp3" preload="auto"></audio>
 
-<div id="signature">きよとより</div>
+<h1 id="title">Happy Birthday 🎂</h1>
+<p id="text">親友へ、特別なステージを用意しました。</p>
+<button onclick="startGame()" id="mainBtn">NEXT</button>
+
+<img src="rocket.PNG" id="rocket">
+<img src="bestfriend.jpg" class="photo" id="photo" style="display:none;">
 
 <script>
 let level=0;
 
-const canvas=document.getElementById("stars");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let stars=[];
-for(let i=0;i<200;i++){
-  stars.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2,
-    d:Math.random()*0.5
-  });
-}
-
-function drawStars(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="white";
-  stars.forEach(s=>{
-    ctx.beginPath();
-    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    ctx.fill();
-    s.y+=s.d;
-    if(s.y>canvas.height){s.y=0;}
-  });
-}
-setInterval(drawStars,30);
-
-function typeWriter(text, element, speed=60){
-  element.innerHTML="";
-  let i=0;
-  function typing(){
-    if(i<text.length){
-      element.innerHTML+=text.charAt(i);
-      i++;
-      setTimeout(typing,speed);
-    }
+function startGame(){
+  const music=document.getElementById("bgm");
+  if(level===0){
+    music.play().catch(()=>{});
   }
-  typing();
+  nextLevel();
 }
 
 function nextLevel(){
   const title=document.getElementById("title");
   const text=document.getElementById("text");
+  const btn=document.getElementById("mainBtn");
 
   level++;
 
@@ -175,45 +109,76 @@ function nextLevel(){
   else if(level===3){
     title.innerHTML="FINAL STAGE 🌌";
     text.innerHTML="これからも一緒に最強の思い出作ろう！";
-    setTimeout(ultimate,1500);
   }
-}
-
-function ultimate(){
-  const title=document.getElementById("title");
-  const text=document.getElementById("text");
-  const photo=document.getElementById("photo");
-  const signature=document.getElementById("signature");
-
-  const rocket=document.createElement("img");
-  rocket.src="rocket.PNG";   // ← 大文字PNG対応
-  rocket.className="rocket";
-  document.body.appendChild(rocket);
-
-  setTimeout(()=>{
-    title.innerHTML="🎂 HAPPY BIRTHDAY 🎂";
-    typeWriter("今日の主役はcrazyゆうきだ！！",text);
-    photo.style.display="block";
-    signature.style.display="block";
-    document.getElementById("lastBtn").style.display="inline-block";
-  },2200);
-}
-
-function celebrate(){
-  for(let i=0;i<80;i++){
-    const confetti=document.createElement("div");
-    confetti.className="confetti";
-    confetti.style.left=Math.random()*100+"%";
-    confetti.style.backgroundColor=
-      ["cyan","blue","white","purple"][Math.floor(Math.random()*4)];
-    document.body.appendChild(confetti);
-    setTimeout(()=>confetti.remove(),3000);
+  else if(level===4){
+    title.innerHTML="今日の主役はcrazyゆうきだ！！";
+    text.innerHTML="きよとより";
+    btn.innerHTML="新しい1年";
+    document.getElementById("photo").style.display="block";
+    launchRocket();
+    confetti();
   }
-
-  setTimeout(()=>{
+  else if(level===5){
     location.reload();
-  },3500);
+  }
 }
+
+function launchRocket(){
+  const rocket=document.getElementById("rocket");
+  rocket.style.bottom="120%";
+}
+
+function confetti(){
+  for(let i=0;i<150;i++){
+    const c=document.createElement("div");
+    c.style.position="fixed";
+    c.style.width="8px";
+    c.style.height="8px";
+    c.style.background="hsl("+Math.random()*360+",100%,50%)";
+    c.style.top="-10px";
+    c.style.left=Math.random()*100+"%";
+    c.style.borderRadius="50%";
+    c.style.animation="fall "+(2+Math.random()*3)+"s linear";
+    document.body.appendChild(c);
+  }
+}
+
+const style=document.createElement("style");
+style.innerHTML=`
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(720deg);
+    opacity:0;
+  }
+}`;
+document.head.appendChild(style);
+
+/* 星背景 */
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let stars=[];
+for(let i=0;i<150;i++){
+  stars.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2
+  });
+}
+
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="white";
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
 </script>
 
 </body>
