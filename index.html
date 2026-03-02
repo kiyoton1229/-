@@ -9,7 +9,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: black;
+  background: radial-gradient(circle, #000000, #1a001f);
   color: white;
   text-align: center;
   overflow: hidden;
@@ -22,7 +22,7 @@ body {
 
 h1 {
   font-size: 2.5em;
-  text-shadow: 0 0 20px #ff00ff;
+  text-shadow: 0 0 25px #ff00ff;
 }
 
 p {
@@ -43,7 +43,7 @@ button {
 
 button:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 20px #ff00ff;
+  box-shadow: 0 0 25px #ff00ff;
 }
 
 #photo {
@@ -52,13 +52,13 @@ button:hover {
   margin-top: 20px;
   border-radius: 20px;
   display: none;
-  box-shadow: 0 0 30px #00ffff;
+  box-shadow: 0 0 40px #00ffff;
 }
 
 .firework {
   position: fixed;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: yellow;
   border-radius: 50%;
   animation: explode 1s ease-out forwards;
@@ -121,13 +121,13 @@ function nextLevel() {
 }
 
 function launchFireworks(){
-  for(let i=0;i<100;i++){
+  for(let i=0;i<120;i++){
     const fw = document.createElement("div");
     fw.className = "firework";
     fw.style.left = "50%";
     fw.style.top = "50%";
-    fw.style.setProperty('--x', (Math.random()*600-300)+'px');
-    fw.style.setProperty('--y', (Math.random()*600-300)+'px');
+    fw.style.setProperty('--x', (Math.random()*800-400)+'px');
+    fw.style.setProperty('--y', (Math.random()*800-400)+'px');
     document.body.appendChild(fw);
     setTimeout(()=>fw.remove(),1000);
   }
