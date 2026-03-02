@@ -19,25 +19,40 @@ canvas{
   position:fixed;
   top:0;
   left:0;
-  z-index:-1;
+  z-index:-2;
+}
+
+.flash{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+  z-index:10;
 }
 
 .container{
   margin-top:20vh;
+  position:relative;
+  z-index:2;
 }
 
 h1{
   font-size:2.5em;
-  text-shadow:0 0 20px cyan;
+  text-shadow:0 0 25px cyan;
 }
 
 button{
   background:cyan;
   border:none;
-  padding:15px 30px;
+  padding:18px 35px;
   font-size:18px;
-  border-radius:30px;
+  border-radius:40px;
   cursor:pointer;
+  transition:0.3s;
 }
 
 button:hover{
@@ -61,46 +76,75 @@ button:hover{
   display:none;
 }
 
-.flash{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  opacity:0;
-  pointer-events:none;
+#lastBtn{
+  display:none;
+  margin-top:20px;
 }
 
 .rocket{
   position:fixed;
-  bottom:-100px;
+  bottom:-250px;
   left:50%;
   transform:translateX(-50%);
-  font-size:60px;
-  animation:launch 2s ease-out forwards;
+  width:130px;
+  animation:launch 3s ease-out forwards;
+  z-index:5;
+  filter: drop-shadow(0 0 30px cyan);
 }
 
 @keyframes launch{
-  0%{bottom:-100px;}
-  100%{bottom:110%;}
+  0%{bottom:-250px;}
+  100%{bottom:120%;}
 }
 
-.shooting-star{
+.fire{
   position:fixed;
-  top:20%;
-  left:-100px;
-  font-size:30px;
-  animation:shoot 1.5s linear forwards;
+  bottom:-200px;
+  left:50%;
+  transform:translateX(-50%);
+  width:30px;
+  height:80px;
+  background:linear-gradient(to top, orange, red, yellow);
+  border-radius:50%;
+  animation:fireMove 0.2s infinite alternate;
+  z-index:4;
 }
 
-@keyframes shoot{
-  0%{left:-100px; top:20%;}
-  100%{left:110%; top:40%;}
+@keyframes fireMove{
+  from{height:70px;}
+  to{height:90px;}
+}
+
+.smoke{
+  position:fixed;
+  bottom:0;
+  width:20px;
+  height:20px;
+  background:rgba(200,200,200,0.4);
+  border-radius:50%;
+  animation:smokeUp 2s linear forwards;
+}
+
+@keyframes smokeUp{
+  0%{transform:translateY(0) scale(1); opacity:0.5;}
+  100%{transform:translateY(-300px) scale(3); opacity:0;}
+}
+
+.confetti{
+  position:fixed;
+  width:8px;
+  height:14px;
+  top:-20px;
+  animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+  0%{transform:translateY(0) rotate(0deg);}
+  100%{transform:translateY(100vh) rotate(720deg);}
 }
 
 .shake{
-  animation:shake 0.5s;
+  animation:shake 0.4s infinite;
 }
 
 @keyframes shake{
@@ -121,9 +165,11 @@ button:hover{
 <div class="container">
   <h1 id="title">🌌 親友専用クエスト 🌌</h1>
   <p id="text">ミッション：宇宙レベルの1年を始めよ。</p>
-  <button onclick="nextLevel()">▶ スタート</button>
+  <button onclick="nextLevel()">さぁ新しい1年を始めよう</button>
   <br>
   <img id="photo" src="bestfriend.jpg">
+  <br>
+  <button id="lastBtn" onclick="celebrate()">新しい1年</button>
 </div>
 
 <div id="signature">きよとより</div>
@@ -131,7 +177,6 @@ button:hover{
 <script>
 let level=0;
 
-// 星背景
 const canvas=document.getElementById("stars");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -192,22 +237,8 @@ function nextLevel(){
   else if(level===3){
     title.innerHTML="FINAL STAGE 🌌";
     text.innerHTML="これからも一緒に最強の思い出作ろう！";
-    document.body.classList.add("shake");
-    setTimeout(countdown,800);
+    setTimeout(ultimate,1500);
   }
-}
-
-function countdown(){
-  const text=document.getElementById("text");
-  let count=3;
-  const interval=setInterval(()=>{
-    text.innerHTML=count+"...";
-    count--;
-    if(count<0){
-      clearInterval(interval);
-      ultimate();
-    }
-  },1000);
 }
 
 function ultimate(){
@@ -215,37 +246,21 @@ function ultimate(){
   const text=document.getElementById("text");
   const photo=document.getElementById("photo");
   const signature=document.getElementById("signature");
-  const flash=document.getElementById("flash");
 
-  // 流れ星
-  const star=document.createElement("div");
-  star.className="shooting-star";
-  star.innerHTML="🌠";
-  document.body.appendChild(star);
-  setTimeout(()=>star.remove(),1500);
+  document.body.classList.add("shake");
 
-  // ロケット発射
-  const rocket=document.createElement("div");
+  const rocket=document.createElement("img");
+  rocket.src="rocket.png";
   rocket.className="rocket";
-  rocket.innerHTML="🚀💥";
   document.body.appendChild(rocket);
 
-  // 爆発フラッシュ
-  setTimeout(()=>{
-    flash.style.opacity="1";
-    setTimeout(()=>{
-      flash.style.opacity="0";
-    },300);
-  },1500);
+  const fire=document.createElement("div");
+  fire.className="fire";
+  document.body.appendChild(fire);
 
-  setTimeout(()=>{
-    title.innerHTML="🎂 HAPPY BIRTHDAY 🎂";
-    typeWriter("今日の主役はcrazyゆうきだ！！",text);
-    photo.style.display="block";
-    signature.style.display="block";
-  },2000);
-}
-</script>
-
-</body>
-</html>
+  for(let i=0;i<15;i++){
+    const smoke=document.createElement("div");
+    smoke.className="smoke";
+    smoke.style.left=(50+Math.random()*20-10)+"%";
+    document.body.appendChild(smoke);
+    setTimeout(()=>smoke.remove(
