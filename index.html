@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>親友へ - Happy Birthday</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1e1e2f, #2b2b45);
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+.container {
+  max-width: 600px;
+}
+
+button {
+  background: #ff4da6;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ff1a8c;
+  transform: scale(1.1);
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1 id="title">🎮 親友専用クエスト 🎮</h1>
+  <p id="text">ミッション：最高の1年をスタートせよ。</p>
+  <button onclick="nextLevel()">▶ スタート</button>
+</div>
+
+<script>
+let level = 0;
+
+function nextLevel() {
+  const title = document.getElementById("title");
+  const text = document.getElementById("text");
+
+  level++;
+
+  if(level === 1){
+    title.innerHTML = "LEVEL 1 クリア 🎉";
+    text.innerHTML = "出会ってくれてありがとう。";
+  }
+  else if(level === 2){
+    title.innerHTML = "LEVEL 2 クリア 💫";
+    text.innerHTML = "どんな時も支えてくれる、最高の親友へ。";
+  }
+  else if(level === 3){
+    title.innerHTML = "FINAL STAGE 👑";
+    text.innerHTML = "親友へ。本当にお誕生日おめでとう！！！これからも一緒に最強の思い出作ろうな。";
+  }
+  else{
+    title.innerHTML = "🎂 HAPPY BIRTHDAY 🎂";
+    text.innerHTML = "今日の主役は君だ！！";
+  }
+}
+</script>
+
+</body>
+</html>
