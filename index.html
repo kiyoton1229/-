@@ -3,92 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>親友専用クエスト</title>
+<title>宇宙最終覚醒</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: radial-gradient(circle, #000000, #1a001f);
-  color: white;
-  text-align: center;
-  overflow: hidden;
+body{
+  margin:0;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+  background:black;
+  color:white;
+  text-align:center;
 }
 
-.container {
-  padding: 20px;
-  margin-top: 15vh;
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
 }
 
-h1 {
-  font-size: 2.5em;
-  text-shadow: 0 0 25px #ff00ff;
+.container{
+  margin-top:20vh;
 }
 
-p {
-  font-size: 1.3em;
+h1{
+  font-size:2.5em;
+  text-shadow:0 0 20px cyan;
 }
 
-button {
-  background: #ff0080;
-  border: none;
-  padding: 15px 30px;
-  font-size: 18px;
-  color: white;
-  border-radius: 30px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: 0.3s;
+button{
+  background:cyan;
+  border:none;
+  padding:15px 30px;
+  font-size:18px;
+  border-radius:30px;
+  cursor:pointer;
 }
 
-button:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 25px #ff00ff;
+button:hover{
+  transform:scale(1.1);
 }
 
-#photo {
-  width: 80%;
-  max-width: 400px;
-  margin-top: 20px;
-  border-radius: 20px;
-  display: none;
-  box-shadow: 0 0 40px #00ffff;
+#photo{
+  width:80%;
+  max-width:400px;
+  margin-top:20px;
+  border-radius:20px;
+  display:none;
+  box-shadow:0 0 40px cyan;
 }
 
-#signature {
-  position: fixed;
-  bottom: 15px;
-  width: 100%;
-  font-size: 14px;
-  opacity: 0.7;
-  display: none;
+#signature{
+  position:fixed;
+  bottom:15px;
+  width:100%;
+  font-size:14px;
+  display:none;
 }
 
-.firework {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: yellow;
-  border-radius: 50%;
-  animation: explode 1s ease-out forwards;
+.flash{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  opacity:0;
+  pointer-events:none;
 }
 
-@keyframes explode {
-  to {
-    transform: translate(var(--x), var(--y));
-    opacity: 0;
-  }
+.rocket{
+  position:fixed;
+  bottom:-100px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:60px;
+  animation:launch 2s ease-out forwards;
+}
+
+@keyframes launch{
+  0%{bottom:-100px;}
+  100%{bottom:110%;}
+}
+
+.shooting-star{
+  position:fixed;
+  top:20%;
+  left:-100px;
+  font-size:30px;
+  animation:shoot 1.5s linear forwards;
+}
+
+@keyframes shoot{
+  0%{left:-100px; top:20%;}
+  100%{left:110%; top:40%;}
+}
+
+.shake{
+  animation:shake 0.5s;
+}
+
+@keyframes shake{
+  0%{transform:translate(5px,5px);}
+  25%{transform:translate(-5px,5px);}
+  50%{transform:translate(5px,-5px);}
+  75%{transform:translate(-5px,-5px);}
+  100%{transform:translate(0,0);}
 }
 </style>
 </head>
-
 <body>
 
+<canvas id="stars"></canvas>
+<div class="flash" id="flash"></div>
 <audio id="bgm" src="music.mp3"></audio>
 
 <div class="container">
-  <h1 id="title">🎮 親友専用クエスト 🎮</h1>
-  <p id="text">ミッション：最高の1年をスタートせよ。</p>
+  <h1 id="title">🌌 親友専用クエスト 🌌</h1>
+  <p id="text">ミッション：宇宙レベルの1年を始めよ。</p>
   <button onclick="nextLevel()">▶ スタート</button>
   <br>
   <img id="photo" src="bestfriend.jpg">
@@ -97,53 +129,121 @@ button:hover {
 <div id="signature">きよとより</div>
 
 <script>
-let level = 0;
+let level=0;
 
-function nextLevel() {
-  const title = document.getElementById("title");
-  const text = document.getElementById("text");
-  const photo = document.getElementById("photo");
-  const music = document.getElementById("bgm");
-  const signature = document.getElementById("signature");
+// 星背景
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-  if(level === 0){
-    music.play();
+let stars=[];
+for(let i=0;i<200;i++){
+  stars.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2,
+    d:Math.random()*0.5
+  });
+}
+
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="white";
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+    s.y+=s.d;
+    if(s.y>canvas.height){s.y=0;}
+  });
+}
+setInterval(drawStars,30);
+
+function typeWriter(text, element, speed=60){
+  element.innerHTML="";
+  let i=0;
+  function typing(){
+    if(i<text.length){
+      element.innerHTML+=text.charAt(i);
+      i++;
+      setTimeout(typing,speed);
+    }
   }
+  typing();
+}
 
+function nextLevel(){
+  const title=document.getElementById("title");
+  const text=document.getElementById("text");
+  const music=document.getElementById("bgm");
+
+  if(level===0){music.play();}
   level++;
 
-  if(level === 1){
-    title.innerHTML = "LEVEL 1 クリア 🎉";
-    text.innerHTML = "出会ってくれてありがとう。";
+  if(level===1){
+    title.innerHTML="LEVEL 1 🚀";
+    text.innerHTML="出会ってくれてありがとう。";
   }
-  else if(level === 2){
-    title.innerHTML = "LEVEL 2 クリア 💫";
-    text.innerHTML = "どんな時も支えてくれる、最高の親友へ。";
+  else if(level===2){
+    title.innerHTML="LEVEL 2 🌠";
+    text.innerHTML="どんな時も支えてくれる、最高の親友へ。";
   }
-  else if(level === 3){
-    title.innerHTML = "FINAL STAGE 👑";
-    text.innerHTML = "これからも一緒に最強の思い出作ろう！";
-    photo.style.display = "block";
-    launchFireworks();
-  }
-  else{
-    title.innerHTML = "🎂 HAPPY BIRTHDAY 🎂";
-    text.innerHTML = "今日の主役はcrazyゆうきだ！！";
-    signature.style.display = "block";
+  else if(level===3){
+    title.innerHTML="FINAL STAGE 🌌";
+    text.innerHTML="これからも一緒に最強の思い出作ろう！";
+    document.body.classList.add("shake");
+    setTimeout(countdown,800);
   }
 }
 
-function launchFireworks(){
-  for(let i=0;i<120;i++){
-    const fw = document.createElement("div");
-    fw.className = "firework";
-    fw.style.left = "50%";
-    fw.style.top = "50%";
-    fw.style.setProperty('--x', (Math.random()*800-400)+'px');
-    fw.style.setProperty('--y', (Math.random()*800-400)+'px');
-    document.body.appendChild(fw);
-    setTimeout(()=>fw.remove(),1000);
-  }
+function countdown(){
+  const text=document.getElementById("text");
+  let count=3;
+  const interval=setInterval(()=>{
+    text.innerHTML=count+"...";
+    count--;
+    if(count<0){
+      clearInterval(interval);
+      ultimate();
+    }
+  },1000);
+}
+
+function ultimate(){
+  const title=document.getElementById("title");
+  const text=document.getElementById("text");
+  const photo=document.getElementById("photo");
+  const signature=document.getElementById("signature");
+  const flash=document.getElementById("flash");
+
+  // 流れ星
+  const star=document.createElement("div");
+  star.className="shooting-star";
+  star.innerHTML="🌠";
+  document.body.appendChild(star);
+  setTimeout(()=>star.remove(),1500);
+
+  // ロケット発射
+  const rocket=document.createElement("div");
+  rocket.className="rocket";
+  rocket.innerHTML="🚀💥";
+  document.body.appendChild(rocket);
+
+  // 爆発フラッシュ
+  setTimeout(()=>{
+    flash.style.opacity="1";
+    setTimeout(()=>{
+      flash.style.opacity="0";
+    },300);
+  },1500);
+
+  setTimeout(()=>{
+    title.innerHTML="🎂 HAPPY BIRTHDAY 🎂";
+    typeWriter("今日の主役はcrazyゆうきだ！！",text);
+    photo.style.display="block";
+    signature.style.display="block";
+  },2000);
 }
 </script>
 
