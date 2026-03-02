@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>crazyゆうき BIRTHDAY</title>
-
 <style>
 body{
   margin:0;
@@ -13,16 +12,18 @@ body{
   font-family:sans-serif;
   text-align:center;
   color:white;
-  background:linear-gradient(to bottom,#000428,#004e92);
+  background:black;
 }
 
-canvas{
+canvas#stars{
   position:fixed;
   top:0;
   left:0;
   width:100%;
   height:100%;
   z-index:-1;
+  background: url('space_bg.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
 h1{
@@ -45,6 +46,7 @@ button{
   color:white;
   cursor:pointer;
   box-shadow:0 0 20px #00c3ff;
+  margin:5px;
 }
 
 button:hover{
@@ -58,6 +60,7 @@ button:hover{
   transform:translateX(-50%);
   width:150px;
   transition:3s ease-in-out;
+  z-index:5;
 }
 
 .photo{
@@ -65,6 +68,28 @@ button:hover{
   border-radius:20px;
   margin-top:20px;
   box-shadow:0 0 20px white;
+}
+
+#fullScreenBtn{
+  position:fixed;
+  bottom:15px;
+  right:15px;
+  padding:10px 15px;
+  font-size:14px;
+  border-radius:10px;
+  background:rgba(0,195,255,0.7);
+  z-index:20;
+}
+
+#confettiBtn{
+  position:fixed;
+  bottom:60px;
+  right:15px;
+  padding:10px 15px;
+  font-size:14px;
+  border-radius:10px;
+  background:rgba(255,0,255,0.7);
+  z-index:20;
 }
 </style>
 </head>
@@ -81,6 +106,9 @@ button:hover{
 
 <img src="rocket.PNG" id="rocket">
 <img src="bestfriend.jpg" class="photo" id="photo" style="display:none;">
+
+<button id="fullScreenBtn" onclick="toggleFullScreen()">全画面</button>
+<button id="confettiBtn" onclick="confetti()">紙吹雪！</button>
 
 <script>
 let level=0;
@@ -147,15 +175,13 @@ function confetti(){
   }
 }
 
-const style=document.createElement("style");
-style.innerHTML=`
-@keyframes fall{
-  to{
-    transform:translateY(100vh) rotate(720deg);
-    opacity:0;
+function toggleFullScreen(){
+  if (!document.fullscreenElement){
+    document.documentElement.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen();
   }
-}`;
-document.head.appendChild(style);
+}
 
 /* 星背景 */
 const canvas=document.getElementById("stars");
@@ -188,6 +214,17 @@ function drawStars(){
   requestAnimationFrame(drawStars);
 }
 drawStars();
+
+/* 紙吹雪アニメーション */
+const style=document.createElement("style");
+style.innerHTML=`
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(720deg);
+    opacity:0;
+  }
+}`;
+document.head.appendChild(style);
 </script>
 
 </body>
