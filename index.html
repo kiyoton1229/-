@@ -55,6 +55,15 @@ button:hover {
   box-shadow: 0 0 40px #00ffff;
 }
 
+#signature {
+  position: fixed;
+  bottom: 15px;
+  width: 100%;
+  font-size: 14px;
+  opacity: 0.7;
+  display: none;
+}
+
 .firework {
   position: fixed;
   width: 6px;
@@ -85,6 +94,8 @@ button:hover {
   <img id="photo" src="bestfriend.jpg">
 </div>
 
+<div id="signature">きよとより</div>
+
 <script>
 let level = 0;
 
@@ -93,6 +104,7 @@ function nextLevel() {
   const text = document.getElementById("text");
   const photo = document.getElementById("photo");
   const music = document.getElementById("bgm");
+  const signature = document.getElementById("signature");
 
   if(level === 0){
     music.play();
@@ -116,7 +128,8 @@ function nextLevel() {
   }
   else{
     title.innerHTML = "🎂 HAPPY BIRTHDAY 🎂";
-    text.innerHTML = "今日の主役は君だ！！";
+    text.innerHTML = "今日の主役はcrazyゆうきだ！！";
+    signature.style.display = "block";
   }
 }
 
