@@ -28,7 +28,7 @@ canvas{
 h1{
   margin-top:100px;
   font-size:2em;
-  text-shadow:0 0 20px #00f;
+  text-shadow:0 0 25px #00f;
 }
 
 p{
@@ -53,7 +53,7 @@ button:hover{
 
 #rocket{
   position:fixed;
-  bottom:-200px;
+  bottom:-250px;
   left:50%;
   transform:translateX(-50%);
   width:150px;
@@ -131,7 +131,7 @@ function launchRocket(){
 }
 
 function confetti(){
-  for(let i=0;i<150;i++){
+  for(let i=0;i<200;i++){
     const c=document.createElement("div");
     c.style.position="fixed";
     c.style.width="8px";
@@ -140,8 +140,10 @@ function confetti(){
     c.style.top="-10px";
     c.style.left=Math.random()*100+"%";
     c.style.borderRadius="50%";
+    c.style.zIndex="10";
     c.style.animation="fall "+(2+Math.random()*3)+"s linear";
     document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3500);
   }
 }
 
@@ -155,7 +157,7 @@ style.innerHTML=`
 }`;
 document.head.appendChild(style);
 
-/* 星背景の修正：canvas サイズ自動更新 */
+/* 星背景 */
 const canvas=document.getElementById("stars");
 const ctx=canvas.getContext("2d");
 
@@ -167,7 +169,7 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 let stars=[];
-for(let i=0;i<150;i++){
+for(let i=0;i<200;i++){
   stars.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
