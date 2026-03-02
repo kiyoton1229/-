@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>宇宙最終覚醒</title>
+<title>宇宙バースデー</title>
 
 <style>
 body{
@@ -19,19 +19,7 @@ canvas{
   position:fixed;
   top:0;
   left:0;
-  z-index:-2;
-}
-
-.flash{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  opacity:0;
-  pointer-events:none;
-  z-index:10;
+  z-index:-1;
 }
 
 .container{
@@ -86,48 +74,14 @@ button:hover{
   bottom:-250px;
   left:50%;
   transform:translateX(-50%);
-  width:130px;
+  width:120px;
   animation:launch 3s ease-out forwards;
   z-index:5;
-  filter: drop-shadow(0 0 30px cyan);
 }
 
 @keyframes launch{
   0%{bottom:-250px;}
   100%{bottom:120%;}
-}
-
-.fire{
-  position:fixed;
-  bottom:-200px;
-  left:50%;
-  transform:translateX(-50%);
-  width:30px;
-  height:80px;
-  background:linear-gradient(to top, orange, red, yellow);
-  border-radius:50%;
-  animation:fireMove 0.2s infinite alternate;
-  z-index:4;
-}
-
-@keyframes fireMove{
-  from{height:70px;}
-  to{height:90px;}
-}
-
-.smoke{
-  position:fixed;
-  bottom:0;
-  width:20px;
-  height:20px;
-  background:rgba(200,200,200,0.4);
-  border-radius:50%;
-  animation:smokeUp 2s linear forwards;
-}
-
-@keyframes smokeUp{
-  0%{transform:translateY(0) scale(1); opacity:0.5;}
-  100%{transform:translateY(-300px) scale(3); opacity:0;}
 }
 
 .confetti{
@@ -142,25 +96,11 @@ button:hover{
   0%{transform:translateY(0) rotate(0deg);}
   100%{transform:translateY(100vh) rotate(720deg);}
 }
-
-.shake{
-  animation:shake 0.4s infinite;
-}
-
-@keyframes shake{
-  0%{transform:translate(5px,5px);}
-  25%{transform:translate(-5px,5px);}
-  50%{transform:translate(5px,-5px);}
-  75%{transform:translate(-5px,-5px);}
-  100%{transform:translate(0,0);}
-}
 </style>
 </head>
 <body>
 
 <canvas id="stars"></canvas>
-<div class="flash" id="flash"></div>
-<audio id="bgm" src="music.mp3"></audio>
 
 <div class="container">
   <h1 id="title">🌌 親友専用クエスト 🌌</h1>
@@ -221,9 +161,7 @@ function typeWriter(text, element, speed=60){
 function nextLevel(){
   const title=document.getElementById("title");
   const text=document.getElementById("text");
-  const music=document.getElementById("bgm");
 
-  if(level===0){music.play();}
   level++;
 
   if(level===1){
@@ -247,20 +185,36 @@ function ultimate(){
   const photo=document.getElementById("photo");
   const signature=document.getElementById("signature");
 
-  document.body.classList.add("shake");
-
   const rocket=document.createElement("img");
   rocket.src="rocket.png";
   rocket.className="rocket";
   document.body.appendChild(rocket);
 
-  const fire=document.createElement("div");
-  fire.className="fire";
-  document.body.appendChild(fire);
+  setTimeout(()=>{
+    title.innerHTML="🎂 HAPPY BIRTHDAY 🎂";
+    typeWriter("今日の主役はcrazyゆうきだ！！",text);
+    photo.style.display="block";
+    signature.style.display="block";
+    document.getElementById("lastBtn").style.display="inline-block";
+  },2200);
+}
 
-  for(let i=0;i<15;i++){
-    const smoke=document.createElement("div");
-    smoke.className="smoke";
-    smoke.style.left=(50+Math.random()*20-10)+"%";
-    document.body.appendChild(smoke);
-    setTimeout(()=>smoke.remove(
+function celebrate(){
+  for(let i=0;i<80;i++){
+    const confetti=document.createElement("div");
+    confetti.className="confetti";
+    confetti.style.left=Math.random()*100+"%";
+    confetti.style.backgroundColor=
+      ["cyan","blue","white","purple"][Math.floor(Math.random()*4)];
+    document.body.appendChild(confetti);
+    setTimeout(()=>confetti.remove(),3000);
+  }
+
+  setTimeout(()=>{
+    location.reload();
+  },3500);
+}
+</script>
+
+</body>
+</html>
